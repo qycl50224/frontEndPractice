@@ -166,6 +166,8 @@
 				color: '#2c3e50'
 			}
 		}
+
+		// which delicate the keyDown 
 		function onKeyDown(event) {
 			if(keyData[event.key]){
 			// Point is just a destination x and y
@@ -182,9 +184,12 @@
 
 		}
 
+		// its a handle to make animation
 		function onFrame(event){
 			for(var i = 0; i < circles.length; i++){
+				// change the color slightly and gradually
 				circles[i].fillColor.hue += 1;
+				// dispear the circle
 				circles[i].scale(.9);
 			}
 		}
