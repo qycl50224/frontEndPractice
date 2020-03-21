@@ -33,7 +33,7 @@
 				}),
 				color: '#9b59b6'
 			},
-				t: {
+			t: {
 				sound: new Howl({
 		  		urls: ['sounds/dotted-spiral.mp3']
 				}),
@@ -59,7 +59,7 @@
 			},
 			o: {
 				sound: new Howl({
-					urls: ['sounds/glimmer.mp3']
+				urls: ['sounds/glimmer.mp3']
 				}),
 				color: '#8e44ad'
 			},
@@ -81,7 +81,7 @@
 				}),
 				color: '#e67e22'
 			},
-				d: {
+			d: {
 				sound: new Howl({
 		  		urls: ['sounds/piston-2.mp3']
 				}),
@@ -155,7 +155,7 @@
 			},
 			n: {
 				sound: new Howl({
-					urls: ['sounds/zig-zag.mp3']
+				urls: ['sounds/zig-zag.mp3']
 				}),
 				color: '#8e44ad'
 			},
@@ -167,7 +167,8 @@
 			}
 		}
 
-		// which delicate the keyDown 
+		// which delicate the keyDown
+		 
 		function onKeyDown(event) {
 			if(keyData[event.key]){
 			// Point is just a destination x and y
@@ -184,14 +185,17 @@
 
 		}
 
-		// its a handle to make animation
+		// refactor, if its area less than 1 then remove it
 		function onFrame(event){
-			for(var i = 0; i < circles.length; i++){
-				// change the color slightly and gradually
-				circles[i].fillColor.hue += 1;
-				// dispear the circle
-				circles[i].scale(.9);
-			}
+		  for(var i = 0; i < circles.length; i++){
+		    circles[i].scale(0.9);
+		    circles[i].fillColor.hue += 1;
+		    if(circles[i].area < 1){
+		      circles[i].remove(); // remove the circle from the canvas
+		      circles.splice(i, 1); // remove the circle from the array
+		      console.log(circles);
+		    }
+		  }
 		}
 
 	</script>
