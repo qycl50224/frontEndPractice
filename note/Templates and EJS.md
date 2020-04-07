@@ -105,3 +105,23 @@ blablabla
 /app.css
 ```
 
+
+
+
+
+最后写了一个与**post**有关的小应用，
+
+介绍了body-parser（一个包）的使用，可以把request转化成可以用dot notation访问的JavaScript对象
+
+```js
+var bodyParser = require("body-parser");
+
+app.use(bodyParser.urlencoded({extended: true}));
+
+blablabla
+
+var newFriend = req.body.newfriend;
+```
+
+![image-20200326172058976](C:\Users\chen\AppData\Roaming\Typora\typora-user-images\image-20200326172058976.png)
+
