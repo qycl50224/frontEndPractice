@@ -1,10 +1,10 @@
-<%- include ("partials/header") %>
+<%- include ("../partials/header") %>
 
 <div class="container">
 	<div class="row">
 		<h1 class="text-center">Create a new campground</h1>
 		<div style="width: 30%; margin: 25px auto;">
-			<form action="/new/newcampground" method="POST">
+			<form action="/campgrounds" method="POST">
 				<div class="form-group">
 					<input class="form-control" type="text" name="name" placeholder="name">	
 				</div>
@@ -26,4 +26,4 @@
 </div>
 
 
-<%- include ("partials/footer") %>
+<%- include ("../partials/footer") %>
