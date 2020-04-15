@@ -11,9 +11,12 @@ var express 	   = require("express"),
 	seedDB         = require("./seeds"),
 	app 		   = express();
 
+
 var commentRoutes = require("./routes/comments");
 var campgroundRoutes = require("./routes/campgrounds");
 var indexRoutes = require("./routes/index");
+// add moment
+app.locals.moment = require('moment');
 
 
 mongoose.connect("mongodb://localhost/yelp_camp");
