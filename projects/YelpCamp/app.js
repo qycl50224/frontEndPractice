@@ -2,7 +2,9 @@ var express 	   = require("express"),
 	bodyParser     = require("body-parser"),
 	mongoose 	   = require("mongoose"),
 	passport       = require("passport"),
-	LocalStrategy  = require("passport-local")
+	LocalStrategy  = require("passport-local"),
+	methodOverride = require("method-override"),
+	flash		   = require("connect-flash"),
 	Campground     = require("./models/campground"),
 	Comment        = require("./models/comment"),
 	User           = require("./models/user"),
@@ -19,6 +21,8 @@ app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static(__dirname + '/public'));
+app.use(methodOverride("_method"));
+app.use(flash());
 // seedDB();
 
 // passport configuration
@@ -39,6 +43,8 @@ passport.deserializeUser(User.deserializeUser());
 // 给所有页面，用于上面的导航栏，添加一个本地变量
 app.use(function(req, res, next){
 	res.locals.currentUser = req.user;
+	res.locals.error = req.flash("error");
+	res.locals.success = req.flash("success");
 	next();
 });
 
