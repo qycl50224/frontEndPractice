@@ -20,6 +20,12 @@ app.locals.moment = require('moment');
 
 
 mongoose.connect("mongodb://localhost/yelp_camp");
+// mongoose.connect("mongodb+srv://qycl50224:<yangchen1225>@cluster0-a8tfr.mongodb.net/test?retryWrites=true&w=majority", {
+// 	useNewUrlParser: true,
+// 	useCreateIndex: true
+// }).then(() => {
+// 	console.log("Connected to DB!");
+// });
 app.set("view engine", "ejs");
 
 app.use(bodyParser.urlencoded({extended: true}));
