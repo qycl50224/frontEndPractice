@@ -1,11 +1,19 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
-</html>
+<%- include("./partials/header") %>
+
+<div class="container">
+	<div class="jumbotron">
+		
+		<h1>Welcome to MicroBlog</h1>
+
+		<p>MicroBlog就是微博啦</p>
+
+		<p>
+			<a href="/login" class="btn btn-primary btn-lg">Login</a>
+			<a href="/reg" class="btn btn-lg btn-default">Register</a>
+		</p>
+	</div>
+</div>
+
+
+
+<%- include("./partials/footer") %>
