@@ -10,7 +10,7 @@ module.exports = User;
 
 User.prototype.save = function save(callback) {
 	var user = {
-		username: this.username;
+		username: this.username,
 		password: this.password
 	};
 	mongodb.open(function(err, db) {
