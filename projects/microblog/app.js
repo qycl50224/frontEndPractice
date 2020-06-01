@@ -2,6 +2,7 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var bodyParser = require('body-parser');
+var flash = require('connect-flash');
 var methodOverride = require('method-override');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
@@ -26,7 +27,7 @@ mongoose.connect("mongodb://localhost/microblog");
 app.configure(function(){
 	app.set('views', path.join(__dirname, 'views'));
 	app.set('view engine', 'ejs');
-	app.use(bodyParser);
+	app.use(bodyParser.json());
 	app.use(methodOverride("_method"));
 	app.use(bodyParser.urlencoded({ extended: true }));
 	app.use(cookieParser());
@@ -55,6 +56,16 @@ app.post('/login', routes.doLogin);
 app.get('/logout', routes.logout);
 
 
+// 视图交互
+app.use(function(req, res, next) {
+	res.locals.user = req.session.user;
+	var err = req.flash('error');
+	var success = req.flash('success');
+	res.locals.error = err.length? err:null;
+	res.locals.success = success.length? success:null;
+	next();
+});
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -71,8 +82,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-app.listen(port, process.env.IP, ()=>{
-	console.log("YelpCamp Start working!!!");
-});
 
 module.exports = app;
