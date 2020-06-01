@@ -39,19 +39,22 @@ User.get = function get(username, callback) {
 		if (err) {
 			return callback(err);
 		}
+		// 读取user集合
 		db.collection('users', function(err, collection) {
 			if (err) {
 				mongodb.close();
 				return callback(err);
 			}
+			// 查找name属性为username的对象
 			collection.findOne({name:username}, function(err, doc) {
 				mongodb.close();
 				if (doc) {
+					// 封装文档为User对象
 					var user = new User(doc);
 				} else {
 					callback(err, null);
 				}
-			})
-		})
-	})
-}
+			});
+		});
+	});
+};
