@@ -42,8 +42,8 @@ User.prototype.save = function save(callback) {
 						return callback(err);
 					} else {
 						console.log('保存成功');
-						client.close();
-						console.log('断开服务器连接6');	
+						// client.close();
+						// console.log('断开服务器连接6');	
 						callback(err, user);
 					}
 					
@@ -73,24 +73,20 @@ User.get = function get(username, callback) {
 				}
 				// 查找name属性为username的对象
 				collection.findOne({username:username}, function(err, doc) {
-					if (err) {
-						console.log(err);
-						return callback(err);
+					if (doc) {
+						// 封装文档为User对象
+						console.log('在数据库中找到该用户');
+						var user = new User(doc);
+						// client.close();
+						// console.log('断开服务器连接2');
+						callback(err, user); // 返回该用户
 					} else {
-						if (doc) {
-							// 封装文档为User对象
-							console.log('在数据库中找到该用户');
-							var user = new User(doc);
-							client.close();
-							console.log('断开服务器连接2');
-							callback(err, user); // 返回该用户
-						} else {
-							console.log('未能在数据库中找到该用户');
-							client.close();
-							console.log('断开服务器连接3');
-							callback(err, null);
-						}
+						console.log('未能在数据库中找到该用户');
+						// client.close();
+						// console.log('断开服务器连接3');
+						callback(err, null);
 					}
+				
 				});
 			});
 		}

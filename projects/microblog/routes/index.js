@@ -43,6 +43,7 @@ router.doReg = function(req, res) {
 				req.flash('error', err);
 				return res.redirect('/reg');
 			}
+			// 注册成功后直接登录
 			req.session.user = newUser;
 			req.flash('success', '注册成功');
 			res.redirect('/');
