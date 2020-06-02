@@ -25,23 +25,22 @@ var app = express();
 
 var port = process.env.PORT || 3000;
 
-// connect to database
-mongoose.connect("mongodb://localhost/microblog");
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(flash());
 app.use(bodyParser.json());
-app.use(methodOverride("_method"));
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(methodOverride("_method"));
 app.use(cookieParser('secret'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
 	secret: setting.cookie_secret,
 	store: new MongoStore({
-		url:'mongodb://localhost/'+setting.db,
-		autoRemove:'native'
+		db: setting.db,
+		url:'mongodb://localhost/microblog'
 	})
 }));
 
@@ -51,7 +50,8 @@ app.use(express.json());
 
 // 给所有页面，用于上面的导航栏，添加一个本地变量
 app.use(function(req, res, next){
-	res.locals.user = req.user;
+	console.log("从session添加本地变量user");
+	res.locals.user = req.session.user;
 	res.locals.error = req.flash("error");
 	res.locals.success = req.flash("success");
 	next();
@@ -81,21 +81,21 @@ app.use(function(req, res, next) {
 });
 
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+// // catch 404 and forward to error handler
+// app.use(function(req, res, next) {
+//   next(createError(404));
+// });
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// // error handler
+// app.use(function(err, req, res, next) {
+//   // set locals, only providing error in development
+//   res.locals.message = err.message;
+//   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+//   // render the error page
+//   res.status(err.status || 500);
+//   res.render('error');
+// });
 
 
 module.exports = app;

@@ -1,6 +1,7 @@
 var express = require('express');
-var passport = require('passport');
 var router = express.Router();
+var crypto = require('crypto');
+var User = require('../models/user.js');
 
 /* GET home page. */
 router.index = function(req, res, next) {
@@ -18,35 +19,50 @@ router.reg = function(req, res) {
 };
 
 router.doReg = function(req, res) {
-	var newUser = new User({username: req.body.username});
-	if(req.body.code === 'sduwh'){
-		User.register(newUser, req.body.password, function(err, user){
-			if(err){
-				console.log(err);
-				req.flash("error", err.message);
-				return res.render("reg");
-			} else {
-				passport.authenticate("local")(req, res, function(){
-					req.flash("success",  user.username + " 已经上线");
-					res.redirect("/index");
-				});	
-			}
-		});
-	} else {
-		req.flash("error: false code");
-		res.redirect("/reg");
-	}
-};
+	var md5 = crypto.createHash('md5');
+	var password = md5.update(req.body.password).digest('base64');
+
+	var newUser = new User({
+		username: req.body.username,
+		password: password
+	});
+	// 检查用户名是否存在
+	User.get(newUser.username, function(err, user) {
+		if (user) 
+			err = '该用户名已存在';
+		if (err) {
+			req.flash('error', err);
+			return res.redirect('/reg');
+		}
+	})
+	// 如果不存在则创建用户
+	newUser.save(function(err) {
+		if (err) {
+			console.log(err);
+			req.flash('error', err);
+			return res.redirect('/reg');
+		}
+		req.session.user = newUser;
+		req.flash('success', '注册成功');
+		res.redirect('/');
+	});
+}
 
 
+// 注册页
 router.login = function(req, res) {
 	res.render('login');
 };
 
 router.doLogin = function(req, res) {
+	res.redirect('/');
 };
 
 router.logout = function(req, res) {
+	req.session.user = null;
+	req.flash('success', '成功登出');
+	res.redirect('/');
 };
 
 module.exports = router;
+
