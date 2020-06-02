@@ -30,21 +30,23 @@ router.doReg = function(req, res) {
 	User.get(newUser.username, function(err, user) {
 		if (user) 
 			err = '该用户名已存在';
-		if (err) {
-			req.flash('error', err);
-			return res.redirect('/reg');
-		}
-	})
-	// 如果不存在则创建用户
-	newUser.save(function(err) {
-		if (err) {
 			console.log(err);
+		if (err) {
 			req.flash('error', err);
+			console.log("返回了");
 			return res.redirect('/reg');
 		}
-		req.session.user = newUser;
-		req.flash('success', '注册成功');
-		res.redirect('/');
+		// 如果不存在则创建用户
+		newUser.save(function(err) {
+			if (err) {
+				console.log(err);
+				req.flash('error', err);
+				return res.redirect('/reg');
+			}
+			req.session.user = newUser;
+			req.flash('success', '注册成功');
+			res.redirect('/');
+		});
 	});
 }
 
@@ -55,7 +57,35 @@ router.login = function(req, res) {
 };
 
 router.doLogin = function(req, res) {
-	res.redirect('/');
+	// 获取表单的用户名和密码
+	var username = req.body.username;
+	var md5 = crypto.createHash('md5');
+	var password = md5.update(req.body.password).digest('base64');
+	// 先看是否存在该账户，再在数据库中找对应的密码，看是否相等
+	User.get(username, function(err, user) {
+		if (err) {
+			console.log(err);
+			return res.redirect('login');
+		} else {
+			if (user) {
+				// 存在该账户，检查密码是否匹配
+				if (user.password === password) {
+					// 密码匹配
+					console.log('密码正确');
+					req.session.user = user;
+					res.redirect('/');
+				} else {
+					// 密码错误
+					console.log('密码错误');
+					res.redirect('/login');
+				}
+			} else {
+				// 账户不存在
+				console.log('该账户不存在');
+				res.redirect('/login');
+			}
+		};
+	});
 };
 
 router.logout = function(req, res) {
