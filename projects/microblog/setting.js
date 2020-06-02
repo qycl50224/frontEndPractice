@@ -1,5 +1,6 @@
 module.exports={
 	cookieSecret:'microblogbyevin',
 	db:'microblog',
-	host:'localhost'
+	host:'localhost',
+	url:'mongodb://localhost/microblog'
 }
